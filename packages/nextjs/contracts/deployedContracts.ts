@@ -6,30 +6,36 @@ import { GenericContractsDeclaration } from "~~/utils/helper/contract";
 
 const deployedContracts = {
   11155111: {
-    FHECounter: {
-      address: "0xead137D42d2E6A6a30166EaEf97deBA1C3D1954e",
+    FHEGenerativeArt: {
+      address: "0x19F1AdADD55EF080c1c8B1d0cc5A621c4E5F0C63",
       abi: [
         {
           inputs: [
             {
               internalType: "externalEuint32",
-              name: "inputEuint32",
+              name: "choiceEncrypted",
               type: "bytes32",
             },
             {
               internalType: "bytes",
-              name: "inputProof",
+              name: "proof",
               type: "bytes",
             },
           ],
-          name: "decrement",
+          name: "createArt",
           outputs: [],
           stateMutability: "nonpayable",
           type: "function",
         },
         {
-          inputs: [],
-          name: "getCount",
+          inputs: [
+            {
+              internalType: "address",
+              name: "user",
+              type: "address",
+            },
+          ],
+          name: "getMyArt",
           outputs: [
             {
               internalType: "euint32",
@@ -43,19 +49,20 @@ const deployedContracts = {
         {
           inputs: [
             {
-              internalType: "externalEuint32",
-              name: "inputEuint32",
-              type: "bytes32",
-            },
-            {
-              internalType: "bytes",
-              name: "inputProof",
-              type: "bytes",
+              internalType: "address",
+              name: "user",
+              type: "address",
             },
           ],
-          name: "increment",
-          outputs: [],
-          stateMutability: "nonpayable",
+          name: "hasCreated",
+          outputs: [
+            {
+              internalType: "bool",
+              name: "",
+              type: "bool",
+            },
+          ],
+          stateMutability: "view",
           type: "function",
         },
         {
