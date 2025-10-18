@@ -1,20 +1,84 @@
-# FHEVM React Template
+# 🧬 FHEGenerativeArt dApp
 
-A minimal React frontend template for building FHEVM-enabled decentralized applications (dApps). This template provides a simple development interface for interacting with FHEVM smart contracts, specifically the `FHECounter.sol` contract.
+A **Fully Homomorphic Encryption (FHE)**–powered decentralized application that allows each user to **create one unique encrypted generative art entry**.  
+All art data is stored and handled **privately on-chain**, ensuring confidentiality even from smart contract logic.
 
-## 🚀 What is FHEVM?
+---
 
-FHEVM (Fully Homomorphic Encryption Virtual Machine) enables computation on encrypted data directly on Ethereum. This template demonstrates how to build dApps that can perform computations while keeping data private.
+## 📜 Smart Contract: `FHEGenerativeArt.sol`
 
-## ✨ Features
+### Overview
 
-- **🔐 FHEVM Integration**: Built-in support for fully homomorphic encryption
-- **⚛️ React + Next.js**: Modern, performant frontend framework
-- **🎨 Tailwind CSS**: Utility-first styling for rapid UI development
-- **🔗 RainbowKit**: Seamless wallet connection and management
-- **🌐 Multi-Network Support**: Works on both Sepolia testnet and local Hardhat node
-- **📦 Monorepo Structure**: Organized packages for SDK, contracts, and frontend
+`FHEGenerativeArt` is a Solidity contract demonstrating **privacy-preserving art creation** using **Zama’s FHEVM (Fully Homomorphic Encryption Virtual Machine)**.  
+Each user can submit a single encrypted “art choice,” which represents some generative art configuration, without revealing it publicly on-chain.
 
+- Built on: `@fhevm/solidity`
+- Network config: `SepoliaConfig` (can be switched for other networks)
+
+---
+
+### 🔐 Features
+
+| Feature | Description |
+|----------|--------------|
+| **Private Art Storage** | Each user’s art data is encrypted using FHE and never revealed on-chain. |
+| **Single Entry per User** | Each wallet can create only one art entry to ensure uniqueness. |
+| **Decryption Control** | Only the creator and the contract have permission to decrypt their data. |
+
+---
+
+### 🧠 Contract Functions
+
+#### `createArt(externalEuint32 choiceEncrypted, bytes proof)`
+Creates a new encrypted art record for the sender.
+
+- **Parameters:**
+  - `choiceEncrypted`: FHE-encrypted `uint32` value representing the art choice.
+  - `proof`: Zero-knowledge proof verifying the encrypted input.
+- **Rules:**
+  - Each address can only create once.
+  - Grants decryption permission to both the user and the contract.
+
+---
+
+#### `hasCreated(address user) → bool`
+Checks if a user has already created an art entry.
+
+- **Returns:** `true` if the address has already created one.
+
+---
+
+#### `getMyArt(address user) → euint32`
+Retrieves the encrypted art data of a user.
+
+- **Note:** The returned value is **encrypted** (`euint32`).
+- Only the user or the contract can decrypt it using their FHE permissions.
+
+---
+
+### 🧩 Example Workflow
+
+1. The frontend encrypts a user’s chosen art parameter (e.g., color palette ID or pattern seed) using FHE.
+2. It sends the encrypted value and proof to `createArt()`.
+3. The contract stores it securely and allows decryption permissions.
+4. The frontend (or authorized viewer) can later decrypt it locally for display.
+
+---
+
+## 💻 Frontend: FHEVM React Template
+
+This dApp uses a **minimal React template** preconfigured for FHEVM integration.
+
+### 🔧 Includes
+
+- **FHEVM React Hooks:**  
+  Simplified interaction with encrypted contract data (`useFHEDecrypt`, etc.)
+- **Ethers.js + FHEVM Plugin:**  
+  To handle encrypted calls, proofs, and local decryption.
+- **Example Integration:**  
+  Demonstrates how to call `createArt`, `hasCreated`, and decrypt `getMyArt`.
+
+---
 ## 📋 Prerequinextjss
 
 Before you begin, ensure you have:
@@ -124,7 +188,7 @@ For more details, see the [MetaMask development guide](https://docs.metamask.io/
 This template uses a monorepo structure with three main packages:
 
 ```
-fhevm-react-template/
+FHEVM-Art-Creator/
 ├── packages/
 │   ├── fhevm-hardhat-template/    # Smart contracts & deployment
 │   ├── fhevm-sdk/                 # FHEVM SDK package
@@ -134,8 +198,8 @@ fhevm-react-template/
 
 ### Key Components
 
-#### 🔗 FHEVM Integration (`packages/nextjs/hooks/fhecounter-example/`)
-- **`useFHECounterWagmi.tsx`**: Example hook demonstrating FHEVM contract interaction
+#### 🔗 FHEVM Integration (`packages/nextjs/hooks`)
+- **`useFHEGenerativeArt.tsx`**: Example hook demonstrating FHEVM contract interaction
 - Essential hooks for FHEVM-enabled smart contract communication
 - Easily copyable to any FHEVM + React project
 

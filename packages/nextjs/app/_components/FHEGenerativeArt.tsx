@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState, useEffect } from "react";
-import { lorelei } from "@dicebear/collection";
+import { croodles } from "@dicebear/collection";
 import { createAvatar } from "@dicebear/core";
 import { useFhevm } from "@fhevm-sdk";
 import { motion } from "framer-motion";
@@ -10,7 +10,7 @@ import { RainbowKitCustomConnectButton } from "~~/components/helper/RainbowKitCu
 import { useFHEGenerativeArt } from "~~/hooks/useFHEGenerativeArt";
 
 export const FHEGenerativeArt = () => {
-  const { isConnected, chain, address } = useAccount();
+  const { isConnected, chain } = useAccount();
   const chainId = chain?.id;
 
   const provider = useMemo(() => (typeof window !== "undefined" ? (window as any).ethereum : undefined), []);
@@ -26,14 +26,14 @@ export const FHEGenerativeArt = () => {
 
   async function handleCreate() {
     await fheArt.createArt(input);
-    const svg = createAvatar(lorelei, { seed: input }).toString();
+    const svg = createAvatar(croodles, { seed: input }).toString();
     setAvatarSvg(svg);
     setInput('')
   }
 
   useEffect(() => {
     if (fheArt.decryptedString) {
-      const svg = createAvatar(lorelei, { seed: fheArt.decryptedString }).toString();
+      const svg = createAvatar(croodles, { seed: fheArt.decryptedString }).toString();
       setAvatarSvg(svg);
     }
   }, [fheArt.decryptedString]);
